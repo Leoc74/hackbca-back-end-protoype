@@ -2,131 +2,131 @@ var express = require('express');
 var router = express.Router();
 module.exports = router; //This line is sometimes placed at the bottom, but it doesn't really matter.
 
-// Import dummy events data 
+// Import dummy projects data 
 //TODO: In the future, instead of maintaining the data in server memory, a separate database
 //      will be maintained and queried 
-var events_data = require('../data/dummy_events');
+var projects_data = require('../data/dummy_projects');
 
-/* GET main events page. */
+/* GET main projects page. */
 router.get('/', function (req, res, next) {
   // Read sort and filter query params if they exist
   var sort = req.query.sort || "Date / Time";
   var filter = req.query.filter || "None";
-  //TODO: In the future, actually filter or sort the events data based on query params
+  //TODO: In the future, actually filter or sort the projects data based on query params
   //      A real database will make that easy
 
-  res.render('events', { title: 'Events', 
+  res.render('projects', { title: 'Projects', 
                         style: "tables", 
-                        events: events_data, 
+                        projects: projects_data, 
                         sort: sort,
                         filter: filter});
 });
 
-/* GET detailed event page */
-router.get('/:event_id', function (req, res, next) {
-  let event_id = req.params.event_id;
+/* GET detailed project page */
+router.get('/:project_id', function (req, res, next) {
+  let project_id = req.params.project_id;
 
-  // Find matching event in the data (a real database will be easier to query)
-  let event = events_data.find(function (evt) { return evt.event_id == event_id });
+  // Find matching project in the data (a real database will be easier to query)
+  let project = projects_data.find(function (evt) { return evt.project_id == project_id });
 
   // alternatively, with standard loops:
-  // let event;
-  // for(int i = 0; i < events_data.length; i++) {
-  //   if (events_data[i].event_id === event_id)
-  //     event = events_data[i];
+  // let project;
+  // for(int i = 0; i < projects_data.length; i++) {
+  //   if (projects_data[i].project_id === project_id)
+  //     project = projects_data[i];
   // }
 
-  if (event === undefined) {
+  if (project === undefined) {
     next(); //pass along to other handlers (send 404)
   }
   else {
-    res.render('event_detail', { title: event.event_name, styles: ["tables", "event"], event: event });
+    res.render('project_detail', { title: project.project_name, styles: ["tables", "project"], project: project });
   }
 });
 
 
-/* GET event creation form page. */
+/* GET project creation form page. */
 router.get('/create', function (req, res, next) {
-  res.render('event_form', { title: 'Create New Event', style: "newevent" })
+  res.render('project_form', { title: 'Create New Project', style: "newproject" })
 });
 
 
-/* GET event modification form page. */
-router.get('/:event_id/modify', function (req, res, next) {
-  let event_id = req.params.event_id;
+/* GET project modification form page. */
+router.get('/:project_id/modify', function (req, res, next) {
+  let project_id = req.params.project_id;
 
-  // Find matching event in the data (a real database will be easier to query)
-  let event = events_data.find(function (evt) { return evt.event_id == event_id });
+  // Find matching project in the data (a real database will be easier to query)
+  let project = projects_data.find(function (evt) { return evt.project_id == project_id });
 
-  if (event === undefined) {
+  if (project === undefined) {
     next(); //pass along, send 404
   }
   else {
-    res.render('event_form', { title: 'Modify Event', style: "newevent", event: event });
+    res.render('project_form', { title: 'Modify Project', style: "newproject", project: project });
   }
 
 })
 
-/* Convenience function to get the next available event_id; temporary until a real database can manage this part*/
-function getNextEventId(){
-  return events_data.reduce(function(max_id, event) {return Math.max(max_id, event.event_id);} , 0) + 1;
+/* Convenience function to get the next available project_id; temporary until a real database can manage this part*/
+function getNextProjectId(){
+  return projects_data.reduce(function(max_id, project) {return Math.max(max_id, project.project_id);} , 0) + 1;
 }
 
-/* POST event; handling form submission for CREATEing a new event . */
+/* POST project; handling form submission for CREATEing a new project . */
 router.post('/', function(req, res, next) {
   // TODO: Ultimately, this would be inserted into the actual database.  
   //       For now, we just update the dummmy data in memory (poorly)
 
   //Get posted form data 
-  let new_event_data = req.body;
-  // determine new event id
-  new_event_data.event_id = getNextEventId();
-  // The form's event_date field is in the wrong format and event_ymd is not yet a thing. 
+  let new_project_data = req.body;
+  // determine new project id
+  new_project_data.project_id = getNextProjectId();
+  // The form's project_date field is in the wrong format and project_ymd is not yet a thing. 
   // We'll let it slide for now.
 
   //Add to "database" -
-  events_data.push(new_event_data);
+  projects_data.push(new_project_data);
 
-  //Redirect to the event page for the new event.
-  res.redirect(`/events/${new_event_data.event_id}`);
+  //Redirect to the project page for the new project.
+  res.redirect(`/projects/${new_project_data.project_id}`);
 });
   
 
-/* POST event with event_id; handling form submission for MODIFYing an existing event. */
-router.post('/:event_id', function(req, res, next) {
-  let event_id = req.params.event_id;
-  //Confirm event exists.
-  let event_index = events_data.findIndex( obj => obj.event_id == event_id);
-  if (event_index == -1)
+/* POST project with project_id; handling form submission for MODIFYing an existing project. */
+router.post('/:project_id', function(req, res, next) {
+  let project_id = req.params.project_id;
+  //Confirm project exists.
+  let project_index = projects_data.findIndex( obj => obj.project_id == project_id);
+  if (project_index == -1)
     next(); //send 404
   else {
     //Prepare form data to be added to database
-    let updated_event_data = req.body;
-    updated_event_data.event_id = event_id;
-    // The form's event_date field is in the wrong format and event_ymd is not yet a thing. 
+    let updated_project_data = req.body;
+    updated_project_data.project_id = project_id;
+    // The form's project_date field is in the wrong format and project_ymd is not yet a thing. 
     // We'll let it slide for now.
 
     //Update and write to database
-    events_data[event_index] = updated_event_data;
+    projects_data[project_index] = updated_project_data;
     
     //Response code of 200 OK
     res.status(200);
-    //Redirect to the event page for the updated event.
-    res.redirect(`/events/${event_id}`);
+    //Redirect to the project page for the updated project.
+    res.redirect(`/projects/${project_id}`);
   }
 });
 
-/* DELETE event with event_id; handling deleting a given event with event_id. */
-router.delete('/:event_id', function(req, res, next) {
-  let event_id = req.params.event_id;
+/* DELETE project with project_id; handling deleting a given project with project_id. */
+router.delete('/:project_id', function(req, res, next) {
+  let project_id = req.params.project_id;
 
-  //Confirm event exists.
-  let event_index = events_data.findIndex( obj => obj.event_id == event_id);
-  if (event_index == -1)
+  //Confirm project exists.
+  let project_index = projects_data.findIndex( obj => obj.project_id == project_id);
+  if (project_index == -1)
     next(); //send 404
   else {
-    //Update (delete one element at event_index)
-    events_data.splice(event_index, 1);
+    //Update (delete one element at project_index)
+    projects_data.splice(project_index, 1);
 
     //Response code of 204 No Content 
     res.sendStatus(204);
