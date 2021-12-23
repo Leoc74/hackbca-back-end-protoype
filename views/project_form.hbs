@@ -1,0 +1,109 @@
+{{!-- 
+Template for both the "create new project" and "modify existing project" pages.
+
+Uses both the #if and #unless helpers to set up the page differently based on 
+whether the project property is part of the data context (and thus a modify page) or not (and thus a create page) 
+https://handlebarsjs.com/guide/builtin-helpers.html#if
+https://handlebarsjs.com/guide/builtin-helpers.html#unless
+
+If meant for modifying the page, needs the data context of a specific project, which is 
+used to fill the form with the current project properties. (see the javascript section)
+It is also used to determine the URL that the form will send its POST request to (see 
+the opening form tag)
+ --}}
+<form id="create_modify_project" method="POST" action="/projects{{#if project}}/{{project.project_id}}{{/if}}">             
+    <div class="container">
+        <div class="card grey lighten-4">
+            <div class="card-content">
+
+                <span class="card-title"><h1>{{#if project}}Modify{{else}}Create New{{/if}} Project</h1></span>
+
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="text" id="project_name" name="project_name" class="validate" data-length="32" required>
+                        <label for="project_name">Project Name</label>
+                    </div>
+                </div>
+
+                <!-- https://materializecss.com/select.html -->
+                <div class="row">
+                    <div class="input-field col s6">
+                        <select id="project_type" name="project_type" class="validate"  required > 
+                                {{#unless project}}<option value="" disabled selected>Select a type</option>{{/unless}}
+                                <option value="Web App" >Web App</option>
+                                <option value="Desktop" >Desktop</option>
+                                <option value="Mobile App" >Mobile App</option>
+                                <option value="Other" >Other</option>
+                            </select>
+                        <label for="project_type">Project Type</label>
+                    </div>
+    
+                </div>
+    
+                <div class="row">
+                    <div class = "input-field col s4">
+                        <input type="text" id=project_date_proposed name="project_date_proposed" class="datepicker no-autoinit" required>
+                        <label for="project_date_proposed">Date Proposed</label>
+                    </div>
+    
+                    <div class="input-field col s4">
+                        <textarea id="project_tech_stack" name="project_tech_stack" class="materialize-textarea" data-length="100"></textarea>
+                        <label for="project_tech_stack">Tech Stack</label>
+                    </div>
+
+                    <div class="input-field col s4">
+                        <textarea id="project_group_members" name="project_group_members" class="materialize-textarea" data-length="200"></textarea>
+                        <label for="project_group_members">Group Members</label>
+                    </div>
+                </div>
+    
+                <div class="row">
+                    <div class="input-field col s12">
+                    <textarea id="project_description" name="project_description" class="materialize-textarea" data-length="500"></textarea>
+                    <label for="project_description">Description</label>
+                    </div>
+                </div>
+
+                <div class="button_wrapper">
+                    <button class="submit waves-effect waves-light btn" type="submit">{{#if project}}Modify{{else}}Create{{/if}}</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<!-- Special script for initializing .datepicker and.timepicker with options -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.datepicker');
+        var instances = M.Datepicker.init(elems, {
+            format: 'mm-dd-yyyy',
+            autoClose: true
+        });
+    });
+
+    //TODO Form Validation
+
+    //Set fields to curent values, if project 
+    {{#if project}}
+    document.addEventListener('DOMContentLoaded', function() {
+        {{#with project}}
+        {{!-- Use triple mustaches to NOT escape characters --}}
+        document.getElementById("project_name").value = "{{{project_name}}}";
+        document.getElementById("project_type").value = "{{{project_type}}}";
+        document.getElementById("project_date_proposed").value = "{{{project_date_proposed}}}";
+        document.getElementById("project_tech_stack").value = "{{{project_tech_stack}}}";
+        document.getElementById("project_group_members").value = "{{{project_group_members}}}";
+        document.getElementById("project_description").value = "{{{project_description}}}";
+        {{/with}}
+
+        
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems, {});
+    });
+    {{/if}}
+
+</script>
+        
