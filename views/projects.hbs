@@ -75,7 +75,7 @@ There are also numerous links to the same page, but with query parameter URLs fo
           <!-- If user already "starred" this project, it should be a yellow star -->
           <!-- <a onclick='toggleInterest(this, "{{ project_id }}"))'class="btn-floating btn-small waves-effect waves-light scale-transition scale-in yellow"><iclass="material-icons">star</i></a> -->
         </td>
-        <td class="blue-text clickable" onclick="date_proposed.href='/projects/{{project_id}}'">{{project_name}}</td>
+        <td class="blue-text clickable" onclick="location.href='/projects/{{project_id}}'">{{project_name}}</td>
         <td> <a href='?filter=date_proposed:{{project_date_proposed}}'>{{project_date_proposed}} </a></td>
         <td><a href='?filter=type:{{project_type}}'>{{project_type}}</a></td>
         <td>{{project_tech_stack}}</td>
