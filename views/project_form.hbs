@@ -1,4 +1,5 @@
 {{!-- 
+<<<<<<< HEAD
 Template for both the "create new event" and "modify existing event" pages.
 
 Uses both the #if and #unless helpers to set up the page differently based on 
@@ -8,6 +9,17 @@ https://handlebarsjs.com/guide/builtin-helpers.html#unless
 
 If meant for modifying the page, needs the data context of a specific event, which is 
 used to fill the form with the current event properties. (see the javascript section)
+=======
+Template for both the "create new project" and "modify existing project" pages.
+
+Uses both the #if and #unless helpers to set up the page differently based on 
+whether the project property is part of the data context (and thus a modify page) or not (and thus a create page) 
+https://handlebarsjs.com/guide/builtin-helpers.html#if
+https://handlebarsjs.com/guide/builtin-helpers.html#unless
+
+If meant for modifying the page, needs the data context of a specific project, which is 
+used to fill the form with the current project properties. (see the javascript section)
+>>>>>>> 270f00c984200d719a1e3f5f9a70d9c18ed141e8
 It is also used to determine the URL that the form will send its POST request to (see 
 the opening form tag)
  --}}
@@ -29,6 +41,7 @@ the opening form tag)
                 <!-- https://materializecss.com/select.html -->
                 <div class="row">
                     <div class="input-field col s6">
+<<<<<<< HEAD
                         <select id="event_type" name="event_type" class="validate"  required > 
                                 {{#unless event}}<option value="" disabled selected>Select a type</option>{{/unless}}
                                 <option value="Main" >Main</option>
@@ -52,10 +65,23 @@ the opening form tag)
                             </select>
                         <label for="event_location">Location</label>
                     </div>
+=======
+                        <select id="project_type" name="project_type" class="validate"  required > 
+                                {{#unless project}}<option value="" disabled selected>Select a type</option>{{/unless}}
+                                <option value="Web App" >Web App</option>
+                                <option value="Desktop" >Desktop</option>
+                                <option value="Mobile App" >Mobile App</option>
+                                <option value="Other" >Other</option>
+                            </select>
+                        <label for="project_type">Project Type</label>
+                    </div>
+    
+>>>>>>> 270f00c984200d719a1e3f5f9a70d9c18ed141e8
                 </div>
     
                 <div class="row">
                     <div class = "input-field col s4">
+<<<<<<< HEAD
                         <input type="text" id=event_date name="event_date" class="datepicker no-autoinit" required>
                         <label for="event_date">Date</label>
                     </div>
@@ -69,18 +95,41 @@ the opening form tag)
                         <input type="number" id="event_duration" name="event_duration" min=0 step=15>
                         <label for="event_duration">Duration (minutes)</label>
                         
+=======
+                        <input type="text" id=project_date_proposed name="project_date_proposed" class="datepicker no-autoinit" required>
+                        <label for="project_date_proposed">Date Proposed</label>
+                    </div>
+    
+                    <div class="input-field col s4">
+                        <textarea id="project_tech_stack" name="project_tech_stack" class="materialize-textarea" data-length="100"></textarea>
+                        <label for="project_tech_stack">Tech Stack</label>
+                    </div>
+
+                    <div class="input-field col s4">
+                        <textarea id="project_group_members" name="project_group_members" class="materialize-textarea" data-length="200"></textarea>
+                        <label for="project_group_members">Group Members</label>
+>>>>>>> 270f00c984200d719a1e3f5f9a70d9c18ed141e8
                     </div>
                 </div>
     
                 <div class="row">
                     <div class="input-field col s12">
+<<<<<<< HEAD
                     <textarea id="event_description" name="event_description" class="materialize-textarea" data-length="500"></textarea>
                     <label for="event_description">Description</label>
+=======
+                    <textarea id="project_description" name="project_description" class="materialize-textarea" data-length="500"></textarea>
+                    <label for="project_description">Description</label>
+>>>>>>> 270f00c984200d719a1e3f5f9a70d9c18ed141e8
                     </div>
                 </div>
 
                 <div class="button_wrapper">
+<<<<<<< HEAD
                     <button class="submit waves-effect waves-light btn" type="submit">{{#if event}}Modify{{else}}Create{{/if}}</button>
+=======
+                    <button class="submit waves-effect waves-light btn" type="submit">{{#if project}}Modify{{else}}Create{{/if}}</button>
+>>>>>>> 270f00c984200d719a1e3f5f9a70d9c18ed141e8
                 </div>
             </div>
         </div>
@@ -97,6 +146,7 @@ the opening form tag)
             autoClose: true
         });
     });
+<<<<<<< HEAD
     
     document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.timepicker');
@@ -121,6 +171,22 @@ the opening form tag)
         document.getElementById("event_time").value = "{{{event_time}}}";
         document.getElementById("event_duration").value = "{{{event_duration}}}";
         document.getElementById("event_description").value = "{{{event_description}}}";
+=======
+
+    //TODO Form Validation
+
+    //Set fields to curent values, if project 
+    {{#if project}}
+    document.addEventListener('DOMContentLoaded', function() {
+        {{#with project}}
+        {{!-- Use triple mustaches to NOT escape characters --}}
+        document.getElementById("project_name").value = "{{{project_name}}}";
+        document.getElementById("project_type").value = "{{{project_type}}}";
+        document.getElementById("project_date_proposed").value = "{{{project_date_proposed}}}";
+        document.getElementById("project_tech_stack").value = "{{{project_tech_stack}}}";
+        document.getElementById("project_group_members").value = "{{{project_group_members}}}";
+        document.getElementById("project_description").value = "{{{project_description}}}";
+>>>>>>> 270f00c984200d719a1e3f5f9a70d9c18ed141e8
         {{/with}}
 
         
